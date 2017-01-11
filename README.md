@@ -1,4 +1,4 @@
-# Conekta .Net Core v1
+# Conekta .Net Core (Conekta Api v1.0.0)
 
 This is a .net library that allows interaction with https://api.conekta.io API.
 
