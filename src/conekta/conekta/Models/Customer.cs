@@ -1,84 +1,101 @@
-﻿using System;
+﻿using Newtonsoft.Json;
 using System.Collections.Generic;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
+using System.Threading.Tasks;
 
-namespace conekta
+namespace Conekta
 {
-	public class Customer : Resource
+    public class Customer : Resource
 	{
-		public string id { get; set; }
-		public string name { get; set; }
-		public string email { get; set; }
-		public string phone { get; set; }
-		public List<Card> cards { get; set; }
-		public Subscription subscription { get; set; }
-		public string plan { get; set; }
+        [JsonProperty("id")]
+		public string Id { get; set; }
+        [JsonProperty("name")]
+		public string Name { get; set; }
+        [JsonProperty("email")]
+        public string Email { get; set; }
+        [JsonProperty("phone")]
+        public string Phone { get; set; }
+        [JsonProperty("cards")]
+        public List<Card> Cards { get; set; }
+        [JsonProperty("subscription")]
+        public Subscription Subscription { get; set; }
+        [JsonProperty("plan")]
+        public string Plan { get; set; }
+        [JsonProperty("logged_in")]
+        public bool LoggedIn { get; set; }
+        [JsonProperty("successful_purchases")]
+        public int SuccessfulPurchases { get; set; }
+        [JsonProperty("created_at")]
+        public int CreatedAt { get; set; }
+        [JsonProperty("updated_at")]
+        public int UpdatedAt { get; set; }
+        [JsonProperty("offline_payments")]
+        public int OfflinePayments { get; set; }
+        [JsonProperty("score")]
+        public int Score { get; set; }
 
-		public bool logged_in { get; set; }
-		public int successful_purchases { get; set; }
-		public int created_at { get; set; }
-		public int updated_at { get; set; }
-		public int offline_payments { get; set; }
-		public int score { get; set; }
-
-		public Customer toClass(string json)
+		public Customer ToClass(string json)
 		{
-			return JsonConvert.DeserializeObject<Customer> (json, new JsonSerializerSettings {
+            Customer customer = JsonConvert.DeserializeObject<Customer>(json, new JsonSerializerSettings
+            {
+                NullValueHandling = NullValueHandling.Ignore
+            });
+
+            return customer;
+		}
+
+		public Card ToCard(string json)
+		{
+			Card card = JsonConvert.DeserializeObject<Card>(json, new JsonSerializerSettings
+            {
 				NullValueHandling = NullValueHandling.Ignore
 			});
+			card.Customer = this;
+            this.Cards.Add(card);
+
+            return card;
 		}
 
-		public Card toCard(string json)
+		public Subscription ToSubscription(string json)
 		{
-			Card card = JsonConvert.DeserializeObject<Card> (json, new JsonSerializerSettings {
+			Subscription subscription = JsonConvert.DeserializeObject<Subscription>(json, new JsonSerializerSettings
+            {
 				NullValueHandling = NullValueHandling.Ignore
 			});
-			card.customer = this;
-			this.cards.Add (card);
-			return card;
+			this.Subscription = subscription;
+			this.Plan = subscription.PlanId;
+
+            return subscription;
 		}
 
-		public Subscription toSubscription(string json)
+		public async Task<Customer> Create(string data)
 		{
-			Subscription subscription = JsonConvert.DeserializeObject<Subscription> (json, new JsonSerializerSettings {
-				NullValueHandling = NullValueHandling.Ignore
-			});
-			this.subscription = subscription;
-			this.plan = subscription.plan_id;
-			return subscription;
+			return this.ToClass(await this.Create("/customers", data));
 		}
 
-		public Customer create(string data)
+		public async Task<Customer> Find(string id)
 		{
-			return this.toClass (this.create ("/customers", data));
+			return this.ToClass(await this.Find("/customers", id));
 		}
 
-		public Customer find(string id)
+		public async Task<Customer> Update(string data)
 		{
-			return this.toClass (this.find ("/customers", id));
+			return this.ToClass(await this.Update("/customers/" + this.Id, data));
 		}
 
-		public Customer update(string data)
+		public async Task<Customer> Delete()
 		{
-			return this.toClass (this.update ("/customers/" + this.id, data));
+			return this.ToClass(await this.Delete("/customers/" + this.Id));
 		}
 
-		public Customer delete()
+		public async Task<Card> CreateCard(string data)
 		{
-			return this.toClass (this.delete ("/customers/" + this.id));
+			return this.ToCard(await this.Create("/customers/" + this.Id + "/cards", data));
 		}
 
-		public Card createCard(string data)
+		public async Task<Subscription> CreateSubscription(string data)
 		{
-			return this.toCard (this.create ("/customers/" + this.id + "/cards", data));
+			return this.ToSubscription(await this.Create("/customers/" + this.Id + "/subscription", data));
 		}
-
-		public Subscription createSubscription(string data)
-		{
-			return this.toSubscription (this.create ("/customers/" + this.id + "/subscription", data));
-		}
-
 	}
 }
 

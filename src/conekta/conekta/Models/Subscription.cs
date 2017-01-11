@@ -1,64 +1,74 @@
-﻿using System;
-using System.Collections.Generic;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
+﻿using Newtonsoft.Json;
+using System.Threading.Tasks;
 
-namespace conekta
+namespace Conekta
 {
-
-	public class Subscription : Resource
+    public class Subscription : Resource
 	{
-		public string id { get; set; }
-		public string status { get; set; }
-		public string plan_id { get; set; }
-		public string card_id { get; set; }
-		public int billing_cycle_start { get; set; }
-		public int billing_cycle_end { get; set; }
-		public int created_at { get; set; }
-		public string customer_id { get; set; }
+        [JsonProperty("id")]
+        public string Id { get; set; }
+        [JsonProperty("status")]
+        public string Status { get; set; }
+        [JsonProperty("plan_id")]
+        public string PlanId { get; set; }
+        [JsonProperty("card_id")]
+        public string CardId { get; set; }
+        [JsonProperty("billing_cycle_start")]
+        public int BillingCycleStart { get; set; }
+        [JsonProperty("billing_cycle_end")]
+        public int BillingCycleEnd { get; set; }
+        [JsonProperty("created_at")]
+        public int CreatedAt { get; set; }
+        [JsonProperty("customer_id")]
+        public string customer_id { get; set; }
 
-		public Subscription toSubscription(string json)
+		public Subscription ToClass(string json)
 		{
-			Subscription subscription = JsonConvert.DeserializeObject<Subscription> (json, new JsonSerializerSettings {
+			Subscription subscription = JsonConvert.DeserializeObject<Subscription>(json, new JsonSerializerSettings
+            {
 				NullValueHandling = NullValueHandling.Ignore
 			});
+
 			return subscription;
 		}
 
-		public Subscription update (string data)
+		public async Task<Subscription> Update(string data)
 		{
-			Subscription subscription = toSubscription (this.update ("/customers/" + this.customer_id + "/subscription", data));
-			this.id = subscription.id;
-			this.status = subscription.status;
-			this.plan_id = subscription.plan_id;
-			this.card_id = subscription.card_id;
-			this.billing_cycle_start = subscription.billing_cycle_start;
-			this.billing_cycle_end = subscription.billing_cycle_end;
-			this.created_at = subscription.created_at;
-			return this;
+			Subscription subscription = ToClass(await this.Update("/customers/" + this.customer_id + "/subscription", data));
+			this.Id = subscription.Id;
+			this.Status = subscription.Status;
+			this.PlanId = subscription.PlanId;
+			this.CardId = subscription.CardId;
+			this.BillingCycleStart = subscription.BillingCycleStart;
+			this.BillingCycleEnd = subscription.BillingCycleEnd;
+            this.CreatedAt = subscription.CreatedAt;
+			
+            return this;
 		}
 
-		public Subscription pause ()
+		public async Task<Subscription> Pause()
 		{
-			Subscription subscription = toSubscription (this.create ("/customers/" + this.customer_id + "/subscription/pause", @"{}"));
-			this.status = subscription.status;
-			return this;
+			Subscription subscription = ToClass(await this.Create("/customers/" + this.customer_id + "/subscription/pause", @"{}"));
+			this.Status = subscription.Status;
+
+            return this;
 		}
 
-		public Subscription resume ()
+		public async Task<Subscription> Resume()
 		{
-			Subscription subscription = toSubscription (this.create ("/customers/" + this.customer_id + "/subscription/resume", @"{}"));
-			this.status = subscription.status;
-			return this;
+			Subscription subscription = ToClass(await this.Create("/customers/" + this.customer_id + "/subscription/resume", @"{}"));
+			this.Status = subscription.Status;
+
+            return this;
 		}
 
-		public Subscription cancel ()
+		public async Task<Subscription> Cancel()
 		{
-			Subscription subscription = toSubscription (this.create ("/customers/" + this.customer_id + "/subscription/cancel", @"{}"));
-			this.status = subscription.status;
-			return this;
+			Subscription subscription = ToClass(await this.Create("/customers/" + this.customer_id + "/subscription/cancel", @"{}"));
+			this.Status = subscription.Status;
+
+            return this;
 		}
 	}
-
 }
 

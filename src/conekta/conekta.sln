@@ -1,7 +1,11 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2012
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "conekta", "conekta\conekta.csproj", "{2F249D83-DA55-4A4D-B044-AC779C18C07D}"
+# Visual Studio 14
+VisualStudioVersion = 14.0.25420.1
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "Conekta", "Conekta\Conekta.xproj", "{FEF120E6-660E-48CE-B0B7-30B424156981}"
+EndProject
+Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "Conekta.Samples", "Conekta.Samples\Conekta.Samples.xproj", "{859B2710-8FD0-493C-A9A3-5F16F1F4ABAA}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -9,9 +13,16 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{2F249D83-DA55-4A4D-B044-AC779C18C07D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{2F249D83-DA55-4A4D-B044-AC779C18C07D}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{2F249D83-DA55-4A4D-B044-AC779C18C07D}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{2F249D83-DA55-4A4D-B044-AC779C18C07D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FEF120E6-660E-48CE-B0B7-30B424156981}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FEF120E6-660E-48CE-B0B7-30B424156981}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FEF120E6-660E-48CE-B0B7-30B424156981}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FEF120E6-660E-48CE-B0B7-30B424156981}.Release|Any CPU.Build.0 = Release|Any CPU
+		{859B2710-8FD0-493C-A9A3-5F16F1F4ABAA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{859B2710-8FD0-493C-A9A3-5F16F1F4ABAA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{859B2710-8FD0-493C-A9A3-5F16F1F4ABAA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{859B2710-8FD0-493C-A9A3-5F16F1F4ABAA}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
 	EndGlobalSection
 EndGlobal

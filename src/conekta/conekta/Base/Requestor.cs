@@ -1,77 +1,70 @@
-﻿using System;
-using System.IO;
-using System.Net;
-using System.Text;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using System;
+using System.IO;
+using System.Net.Http;
+using System.Text;
+using System.Threading.Tasks;
 
-namespace conekta
+namespace Conekta
 {
-
-	public class Requestor
+    public class Requestor
 	{
-
-		public Requestor ()
+        public async Task<String> Request(String method, String requestUri, String data = "{}")
 		{
-		}
+            string response = string.Empty;
 
-		public String request (String method, String resource_uri, String data = "{}")
-		{
-			try {
-				HttpWebRequest http = (HttpWebRequest)WebRequest.Create(conekta.Api.baseUri + resource_uri);
-				http.Accept = "application/vnd.conekta-v" + conekta.Api.version + "+json";
-				http.UserAgent = "Conekta/v1 DotNetBindings/Conekta::" + conekta.Api.version;
-				http.Method = method;
+            try
+            {
+                HttpClient httpClient = new HttpClient();
 
-				var plainTextBytes = System.Text.Encoding.UTF8.GetBytes(conekta.Api.apiKey);
-				http.Headers.Add("Authorization", "Basic " + System.Convert.ToBase64String(plainTextBytes) + ":");
-				http.Headers.Add ("Accept-Language", conekta.Api.locale);
+                HttpMethod httMethod = new HttpMethod(method);
+                Uri uri = new Uri(Api.BaseUri + requestUri);
 
-				if (method == "POST" || method == "PUT") {
-					var dataBytes = Encoding.ASCII.GetBytes(data);
+                HttpRequestMessage httpRequestMessage = new HttpRequestMessage(httMethod, uri);
+                httpRequestMessage.Headers.Add("Authorization", "Basic " + Convert.ToBase64String(Encoding.UTF8.GetBytes(Api.ApiKey)) + ":");
+                httpRequestMessage.Headers.Add("Accept", "application/vnd.conekta-v" + Api.Version + "+json");
+                httpRequestMessage.Headers.Add("Accept-Language", Api.ApiKey);
+                httpRequestMessage.Headers.Add("User-Agent", "Conekta/v1 DotNetBindings/" + Api.Version);
 
-					http.ContentLength = dataBytes.Length;
-					http.ContentType = "application/json";
+                if (httMethod.Method.Equals("POST")
+                    || httMethod.Method.Equals("PUT"))
+                {
+                    byte[] bytes = Encoding.ASCII.GetBytes(data);
+                    Stream stream = new MemoryStream(bytes);
+                    HttpContent httpContent = new StreamContent(stream);
+                    httpRequestMessage.Content = httpContent;
 
-					Stream dataStream = http.GetRequestStream ();
-					dataStream.Write (dataBytes, 0, dataBytes.Length);
-				}
+                    httpContent.Headers.Add("Content-Length", bytes.Length.ToString());
+                    httpContent.Headers.Add("Content-Type", "application/json");
+                }
 
-				WebResponse response = http.GetResponse ();
-				var responseString = new StreamReader(response.GetResponseStream()).ReadToEnd();
-				return responseString;	
-			} catch (WebException webExcp) {
-				WebExceptionStatus status =  webExcp.Status;
+                HttpResponseMessage httpResponseMessage = await httpClient.SendAsync(httpRequestMessage);
+                response = await httpResponseMessage.Content.ReadAsStringAsync();
+                httpResponseMessage.EnsureSuccessStatusCode();
+            }
+            catch (HttpRequestException httpReqEx)
+            {
+                JObject obj = JsonConvert.DeserializeObject<JObject>(response, new JsonSerializerSettings
+                {
+                    NullValueHandling = NullValueHandling.Ignore
+                });
 
-				if (status == WebExceptionStatus.ProtocolError) {
-					HttpWebResponse httpResponse = (HttpWebResponse)webExcp.Response;
+                ConektaException conektaEx = new ConektaException(obj.GetValue("message_to_purchaser").ToString());
+                conektaEx.MessageToPurchaser = obj.GetValue("message_to_purchaser").ToString();
+                conektaEx.Message = obj.GetValue("message").ToString();
+                conektaEx.Type = obj.GetValue("type").ToString();
 
-					var encoding = ASCIIEncoding.ASCII;
-					using (var reader = new System.IO.StreamReader(httpResponse.GetResponseStream(), encoding))
-					{
-						string responseText = reader.ReadToEnd();
+                throw conektaEx;
+            }
+            catch (Exception ex)
+            {
+                System.Console.WriteLine(ex.ToString());
+                return "";
+            }
 
-						JObject obj = JsonConvert.DeserializeObject<JObject>(responseText, new JsonSerializerSettings
-						{
-							NullValueHandling = NullValueHandling.Ignore
-						});
-
-
-						ConektaException ex = new ConektaException(obj.GetValue("message_to_purchaser").ToString());
-						ex.message_to_purchaser = obj.GetValue("message_to_purchaser").ToString();
-						ex.message = obj.GetValue("message").ToString();
-						ex._type = obj.GetValue("type").ToString();
-
-						throw ex;
-					}
-				}
-				return "";
-			} catch	(Exception e) {
-				System.Console.WriteLine (e.ToString ());
-				return "";
-			}
-		}
-
+            return response;
+        }
 	}
 
 }

@@ -1,50 +1,84 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 
-namespace conekta
+namespace Conekta
 {
-	public class PaymentMethod
+    public class PaymentMethod
 	{
-		public Int64 expires_at { get; set; }
-		public String type { get; set; }
-		public String _object { get; set; }
+        [JsonProperty("expires_at")]
+        public Int64 ExpiresAt { get; set; }
+        [JsonProperty("type")]
+        public String Type { get; set; }
+        [JsonProperty("_object")]
+        public String Object { get; set; }
 
-		/*Oxxo Payment*/
-		public String barcode { get; set; }
-		public String barcode_url { get; set; }
-		public String store_name { get; set; }
+        /*Oxxo Payment*/
+        [JsonProperty("barcode")]
+        public String Barcode { get; set; }
+        [JsonProperty("barcode_url")]
+        public String BarcodeUrl { get; set; }
+        [JsonProperty("store_name")]
+        public String StoreName { get; set; }
 
-		/*Spei Payment*/
-		public String clabe { get; set; }
-		public String bank { get; set; }
-		public String issuing_account_holder { get; set; }
-		public String issuing_account_tax_id { get; set; }
-		public String issuing_account_bank { get; set; }
-		public String issuing_account_number { get; set; }
-		public String receiving_account_holder { get; set; }
-		public String receiving_account_tax_id { get; set; }
-		public String receiving_account_number { get; set; }
-		public String receiving_account_bank { get; set; }
-		public String reference_number { get; set; }
-		public String description { get; set; }
-		public String tracking_code { get; set; }
+        /*Spei Payment*/
+        [JsonProperty("clabe")]
+        public String CLABE { get; set; }
+        [JsonProperty("bank")]
+        public String Bank { get; set; }
+        [JsonProperty("issuing_account_holder")]
+        public String IssuingAccountHolder { get; set; }
+        [JsonProperty("issuing_account_tax_id")]
+        public String IssuingAccountTaxId { get; set; }
+        [JsonProperty("issuing_account_bank")]
+        public String IssuingAccountBank { get; set; }
+        [JsonProperty("issuing_account_number")]
+        public String IssuingAccountNumber { get; set; }
+        [JsonProperty("receiving_account_holder")]
+        public String ReceivingAccountHolder { get; set; }
+        [JsonProperty("receiving_account_tax_id")]
+        public String ReceivingAccountTaxId { get; set; }
+        [JsonProperty("receiving_account_number")]
+        public String ReceivingAccountNumber { get; set; }
+        [JsonProperty("receiving_account_bank")]
+        public String ReceivingAccountBank { get; set; }
+        [JsonProperty("reference_number")]
+        public String ReferenceNumber { get; set; }
+        [JsonProperty("description")]
+        public String Description { get; set; }
+        [JsonProperty("tracking_code")]
+        public String TrackingCode { get; set; }
 
-		/*Credit Card Payment*/
-		public String name { get; set; }
-		public String exp_month { get; set; }
-		public String exp_year { get; set; }
-		public String auth_code { get; set; }
-		public String normalized_device_fingerprint { get; set; }
-		public String last4 { get; set; }
-		public String brand { get; set; }
-		public String issuer { get; set; }
-		public String account_type { get; set; }
-		public String country { get; set; }
-		public float fraud_score { get; set; }
+        /*Credit Card Payment*/
+        [JsonProperty("name")]
+        public String Name { get; set; }
+        [JsonProperty("exp_month")]
+        public String ExpirationMonth { get; set; }
+        [JsonProperty("exp_year")]
+        public String ExpirationYear { get; set; }
+        [JsonProperty("auth_code")]
+        public String AuthCode { get; set; }
+        [JsonProperty("normalized_device_fingerprint")]
+        public String NormalizedDeviceFingerprint { get; set; }
+        [JsonProperty("last4")]
+        public String Last4 { get; set; }
+        [JsonProperty("brand")]
+        public String Brand { get; set; }
+        [JsonProperty("issuer")]
+        public String Issuer { get; set; }
+        [JsonProperty("account_type")]
+        public String AccountType { get; set; }
+        [JsonProperty("country")]
+        public String Country { get; set; }
+        [JsonProperty("fraud_score")]
+        public float FraudScore { get; set; }
 
-		/*Banorte payment*/
-		public String service_name { get; set; }
-		public String service_number { get; set; }
-		public String reference { get; set; }
+        /*Banorte payment*/
+        [JsonProperty("service_name")]
+        public String ServiceName { get; set; }
+        [JsonProperty("service_number")]
+        public String ServiceNumber { get; set; }
+        [JsonProperty("reference")]
+        public String Reference { get; set; }
 	}
 }
 

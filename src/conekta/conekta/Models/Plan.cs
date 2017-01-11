@@ -1,50 +1,61 @@
-﻿using System;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
+﻿using Newtonsoft.Json;
+using System;
+using System.Threading.Tasks;
 
-namespace conekta
+namespace Conekta
 {
-	public class Plan : Resource
+    public class Plan : Resource
 	{
-		public String id { get; set; }
-		public String name { get; set; }
-		public int amount { get; set; }
-		public String currency { get; set; }
-		public String interval { get; set; }
-		public int frequency { get; set; }
-		public int trial_period_days { get; set; }
-		public int expiry_count { get; set; }
+        [JsonProperty("id")]
+		public String Id { get; set; }
+        [JsonProperty("name")]
+		public String Name { get; set; }
+        [JsonProperty("amount")]
+        public int Amount { get; set; }
+        [JsonProperty("currency")]
+        public String Currency { get; set; }
+        [JsonProperty("interval")]
+        public String Interval { get; set; }
+        [JsonProperty("frequency")]
+        public int Frequency { get; set; }
+        [JsonProperty("trial_period_days")]
+        public int TrialPeriodDays { get; set; }
+        [JsonProperty("expiry_count")]
+        public int ExpiryCount { get; set; }
 
-		public Plan toClass (string json)
+		public Plan ToClass(string json)
 		{
-			return JsonConvert.DeserializeObject<Plan> (json, new JsonSerializerSettings {
-				NullValueHandling = NullValueHandling.Ignore
-			});
+            Plan plan = JsonConvert.DeserializeObject<Plan>(json, new JsonSerializerSettings
+            {
+                NullValueHandling = NullValueHandling.Ignore
+            });
+
+            return plan;
 		}
 
-		public Plan create(string data)
+		public async Task<Plan> Create(string data)
 		{
-			return this.toClass(this.create ("/plans", data));
+			return this.ToClass(await this.Create("/plans", data));
 		}
 
-		public Plan find(string id)
+		public async Task<Plan> Find(string id)
 		{
-			return this.toClass(this.find ("/plans/", id));
+			return this.ToClass(await this.Find("/plans/", id));
 		}
 
-		public Plan update (string data)
+		public async Task<Plan> Update(string data)
 		{
-			Plan plan = toClass (this.update ("/plans/" + this.id, data));
-			this.id = plan.id;
-			this.name = plan.name;
-			this.amount = plan.amount;
-			return this;
+			Plan plan = ToClass(await this.Update("/plans/" + this.Id, data));
+			this.Id = plan.Id;
+			this.Name = plan.Name;
+			this.Amount = plan.Amount;
+
+            return this;
 		}
 
-		public Plan delete ()
+		public async Task<Plan> Delete()
 		{
-			return toClass (this.delete ("/plans/" + this.id));
+			return ToClass(await this.Delete("/plans/" + this.Id));
 		}
 	}
 }
-

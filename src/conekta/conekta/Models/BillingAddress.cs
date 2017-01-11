@@ -1,18 +1,30 @@
-﻿using System;
+﻿using Newtonsoft.Json;
 
-namespace conekta
+namespace Conekta
 {
-	public class BillingAddress
+    public class BillingAddress
 	{
-		public string street1 { get; set; }
-		public string street2 { get; set; }
-		public string city { get; set; }
-		public string state { get; set; }
-		public string zip { get; set; }
-		public string country { get; set; }
-		public string tax_id { get; set; }
-		public string company_name { get; set; }
-		public string phone { get; set; }
-		public string email { get; set; }
+        [JsonProperty("street1")]
+        public string Street1 { get; set; }
+        [JsonProperty("street2")]
+        public string Street2 { get; set; }
+        [JsonProperty("street3")]
+        public string Street3 { get; set; }
+        [JsonProperty("city")]
+        public string City { get; set; }
+        [JsonProperty("state")]
+        public string State { get; set; }
+        [JsonProperty("zip")]
+        public string Zip { get; set; }
+        [JsonProperty("country")]
+        public string Country { get; set; }
+        [JsonProperty("tax_id")]
+        public string TaxId { get; set; }
+        [JsonProperty("company_name")]
+        public string CompanyName { get; set; }
+        [JsonProperty("phone")]
+        public string Phone { get; set; }
+        [JsonProperty("email")]
+        public string Email { get; set; }
 	}
 }

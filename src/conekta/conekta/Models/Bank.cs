@@ -1,11 +1,13 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 
-namespace conekta
+namespace Conekta
 {
-	public class Bank
+    public class Bank
 	{
-		public String type { get; set; }
-		public DateTime expires_at { get; set; }
+        [JsonProperty("type")]
+		public String Type { get; set; }
+        [JsonProperty("expires_at")]
+        public DateTime ExpiresAt { get; set; }
 	}
 }
-

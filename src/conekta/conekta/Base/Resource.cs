@@ -1,33 +1,37 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
+using System.Threading.Tasks;
 
-namespace conekta
+namespace Conekta
 {
-
-	public class Resource : ConektaObject, ICloneable
+    public class Resource : ConektaObject, ICloneable
 	{
-		Requestor requestor = new Requestor();
-		public String type { get; set; }
-		public String message { get; set; }
-		public String message_to_purchaser { get; set; }
-		public String code { get; set; }
-		public String param { get; set; }
+		private Requestor requestor = new Requestor();
+        [JsonProperty("type")]
+        public String Type { get; set; }
+        [JsonProperty("message")]
+        public String Message { get; set; }
+        [JsonProperty("MessageToPurchaser")]
+        public String MessageToPurchaser { get; set; }
+        [JsonProperty("code")]
+        public String Code { get; set; }
+        [JsonProperty("param")]
+        public String Param { get; set; }
 
-		public Resource () {}
+		public Resource() {}
 
-		public string request(string method, string resource_uri, string data)
+		public async Task<string> Request(string method, string requestUri, string data)
 		{
-			return requestor.request(method, resource_uri, data);
+			return await requestor.Request(method, requestUri, data);
 		}
 
-		public string find(String resource_uri, String id)
+		public async Task<string> Find(String requestUri, String id)
 		{
-			return requestor.request("GET", resource_uri + "/" + id);
+			return await requestor.Request("GET", requestUri + "/" + id);
 		}
 
-		public string where(String resource_uri, String data)
+		public async Task<string> Where(String requestUri, String data)
 		{
 			Dictionary<string, string> obj = JsonConvert.DeserializeObject<Dictionary<string, string>>(data);
 
@@ -38,24 +42,22 @@ namespace conekta
 				list_params += item.Key + "=" + item.Value + "&";
 			}
 
-			return requestor.request("GET", resource_uri + list_params.Substring(0, list_params.Length - 1));
+			return await requestor.Request("GET", requestUri + list_params.Substring(0, list_params.Length - 1));
 		}
 
-		public string create(String resource_uri, String data)
+		public async Task<string> Create(String requestUri, String data)
 		{
-			return requestor.request("POST", resource_uri, data);
+			return await requestor.Request("POST", requestUri, data);
 		}
 
-		public string update(String resource_uri, String data)
+		public async Task<string> Update(String requestUri, String data)
 		{
-			return requestor.request ("PUT", resource_uri, data);
+			return await requestor.Request ("PUT", requestUri, data);
 		}
 
-		public string delete(String resource_uri)
+		public async Task<string> Delete(String requestUri)
 		{
-			return requestor.request ("DELETE", resource_uri);
+			return await requestor.Request("DELETE", requestUri);
 		}
-
 	}
-
 }

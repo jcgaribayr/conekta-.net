@@ -1,12 +1,16 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 
-namespace conekta
+namespace Conekta
 {
 	public class ConektaException : Exception
 	{
-		public String message_to_purchaser;
-		public String message;
-		public String _type;
+        [JsonProperty("message_to_purchaser")]
+		public String MessageToPurchaser;
+        [JsonProperty("message")]
+        new public String Message;
+        [JsonProperty("_type")]
+        public String Type;
 
 		public ConektaException()
 		{
@@ -14,7 +18,7 @@ namespace conekta
 
 		public ConektaException(string message) : base(message)
 		{
-			this.message = message;
+			this.Message = message;
 		}
 	}
 }

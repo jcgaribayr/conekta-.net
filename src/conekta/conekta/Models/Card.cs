@@ -1,53 +1,61 @@
-﻿using System;
-using System.Collections.Generic;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
+﻿using Newtonsoft.Json;
+using System.Threading.Tasks;
 
-namespace conekta
+namespace Conekta
 {
-	public class Card : Resource
+    public class Card : Resource
 	{
-		public string id { get; set; }
-		public string name { get; set; }
-		public string brand { get; set; }
-		public string last4 { get; set; }
-		public string exp_month { get; set; }
-		public string exp_year { get; set; }
-		public int created_at { get; set; }
-		public string customer_id { get; set; }
-		public Customer customer { get; set; }
+        [JsonProperty("id")]
+        public string Id { get; set; }
+        [JsonProperty("name")]
+        public string Name { get; set; }
+        [JsonProperty("brand")]
+        public string Brand { get; set; }
+        [JsonProperty("last4")]
+        public string Last4 { get; set; }
+        [JsonProperty("exp_month")]
+        public string ExpirationMonth { get; set; }
+        [JsonProperty("exp_year")]
+        public string ExpirationYear { get; set; }
+        [JsonProperty("created_at")]
+        public int CreatedAt { get; set; }
+        [JsonProperty("customer_id")]
+        public string CustomerId { get; set; }
+        [JsonProperty("customer")]
+        public Customer Customer { get; set; }
 
-		public Card toCard(string json)
+        public Card ToClass(string json)
 		{
-			Card card = JsonConvert.DeserializeObject<Card> (json, new JsonSerializerSettings {
+			Card card = JsonConvert.DeserializeObject<Card> (json, new JsonSerializerSettings
+            {
 				NullValueHandling = NullValueHandling.Ignore
 			});
-			return card;
+
+            return card;
 		}
 
-		public Card update (string data)
+		public async Task<Card> Update(string data)
 		{
-			Card card = toCard (this.update ("/customers/" + this.customer_id + "/cards/" + this.id, data));
-			this.id = card.id;
-			this.name = card.name;
-			this.brand = card.brand;
-			this.last4 = card.last4;
-			this.exp_month = card.exp_month;
-			this.exp_year = card.exp_year;
-			this.created_at = card.created_at;
-			this.customer_id = card.customer_id;
-			return this;
+			Card card = ToClass(await this.Update("/customers/" + this.CustomerId + "/cards/" + this.Id, data));
+			this.Id = card.Id;
+			this.Name = card.Name;
+			this.Brand = card.Brand;
+			this.Last4 = card.Last4;
+			this.ExpirationMonth = card.ExpirationMonth;
+			this.ExpirationYear = card.ExpirationYear;
+			this.CreatedAt = card.CreatedAt;
+			this.CustomerId = card.CustomerId;
+
+            return this;
 		}
 
-		public Card delete ()
+		public async Task<Card> delete ()
 		{
-			Card card = toCard (this.delete ("/customers/" + this.customer_id + "/cards/" + this.id));
-
-			int index = customer.cards.IndexOf (this);
-			customer.cards.RemoveAt (index);
+			Card card = ToClass(await this.Delete("/customers/" + this.CustomerId + "/cards/" + this.Id));
+			int index = Customer.Cards.IndexOf (this);
+			Customer.Cards.RemoveAt (index);
 
 			return card;
 		}
 	}
 }
-

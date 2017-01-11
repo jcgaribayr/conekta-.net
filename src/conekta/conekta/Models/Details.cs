@@ -1,16 +1,23 @@
-﻿using System;
+﻿using Newtonsoft.Json;
 using System.Collections.Generic;
 
-namespace conekta
+namespace Conekta
 {
-	public class Details
+    public class Details
 	{
-		public string name { get; set; }
-		public string phone { get; set; }
-		public string email { get; set; }
-		public Customer customer { get; set; }
-		public List<LineItem> line_items { get; set; }
-		public BillingAddress billing_address { get; set; }
-		public ShippingAddress shipment { get; set; }
+        [JsonProperty("name")]
+		public string Name { get; set; }
+        [JsonProperty("phone")]
+        public string Phone { get; set; }
+        [JsonProperty("email")]
+        public string Email { get; set; }
+        [JsonProperty("customer")]
+        public Customer Customer { get; set; }
+        [JsonProperty("line_items")]
+        public List<LineItem> LineItems { get; set; }
+        [JsonProperty("billing_address")]
+        public BillingAddress BillingAddress { get; set; }
+        [JsonProperty("shipment")]
+        public ShippingAddress Shipment { get; set; }
 	}
 }

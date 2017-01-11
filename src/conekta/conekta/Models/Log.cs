@@ -1,17 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using System.Threading.Tasks;
 
-namespace conekta
+namespace Conekta
 {
-	public class Log : Resource
+    public class Log : Resource
 	{
-		public JObject[] where (string data = @"{}")
+		public async Task<JObject[]> Where(string data = @"{}")
 		{
-			string result = this.where ("/logs", data);
+			string result = await this.Where("/logs", data);
 
-			JObject[] logs = JsonConvert.DeserializeObject<JObject[]> (result, new JsonSerializerSettings {
+			JObject[] logs = JsonConvert.DeserializeObject<JObject[]>(result, new JsonSerializerSettings
+            {
 				NullValueHandling = NullValueHandling.Ignore
 			});
 
